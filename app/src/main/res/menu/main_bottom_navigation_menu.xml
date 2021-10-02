@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main_home_item"
+        android:title="@string/main_list_tab_title"
+        android:enabled="true"
+        android:icon="@drawable/ic_list"
+        />
+    <item
+        android:id="@+id/main_map_item"
+        android:title="@string/main_favorite_tab_title"
+        android:enabled="true"
+        android:icon="@drawable/ic_star_inverted"
+        />
+</menu>

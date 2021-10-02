@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">CleanArchitectureWithMVVM</string>
+
+    <!--    Main-->
+    <string name="main_list_tab_title">List</string>
+    <string name="main_favorite_tab_title">Favorite</string>
+    <string name="main_empty_favorite">즐겨찾기가 비어있습니다. List에서 별표를 눌러 즐겨찾기에 추가해주세요.</string>
+    <string name="main_empty_api_results">결과를 불러왔으나, 모든 데이터를 불러와서, 표시할 데이터가 없습니다. </string>
+    <!--    Database-->
+    <string name="database_failed">데이터베이스를 읽어오는데 실패하였습니다</string>
+
 </resources>

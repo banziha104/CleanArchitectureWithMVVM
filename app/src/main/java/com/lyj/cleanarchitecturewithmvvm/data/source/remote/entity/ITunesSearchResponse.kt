@@ -1,6 +1,7 @@
-package com.lyj.cleanarchitecturewithmvvm.data.source.remote.entities
+package com.lyj.cleanarchitecturewithmvvm.data.source.remote.entity
 
 import com.google.gson.annotations.SerializedName
+import com.lyj.cleanarchitecturewithmvvm.domain.model.TrackDataGettable
 
 class ITunesSearchResponse {
 
@@ -30,10 +31,10 @@ class ITunesSearchResponse {
         val artistId: Int? = null,
 
         @field:SerializedName("trackName")
-        val trackName: String? = null,
+        override val trackName: String? = null,
 
         @field:SerializedName("collectionName")
-        val collectionName: String? = null,
+        override val collectionName: String? = null,
 
         @field:SerializedName("artistViewUrl")
         val artistViewUrl: String? = null,
@@ -75,7 +76,7 @@ class ITunesSearchResponse {
         val kind: String? = null,
 
         @field:SerializedName("trackId")
-        val trackId: Int? = null,
+        override val trackId: Int? = null,
 
         @field:SerializedName("collectionPrice")
         val collectionPrice: Double? = null,
@@ -102,7 +103,7 @@ class ITunesSearchResponse {
         val trackCensoredName: String? = null,
 
         @field:SerializedName("artistName")
-        val artistName: String? = null,
+        override val artistName: String? = null,
 
         @field:SerializedName("collectionCensoredName")
         val collectionCensoredName: String? = null,
@@ -118,5 +119,8 @@ class ITunesSearchResponse {
 
         @field:SerializedName("collectionArtistViewUrl")
         val collectionArtistViewUrl: String? = null
-    )
+    ) : TrackDataGettable {
+        override val url: String?
+            get() = artworkUrl60
+    }
 }

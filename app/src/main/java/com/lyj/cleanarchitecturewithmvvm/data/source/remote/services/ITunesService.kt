@@ -1,6 +1,6 @@
 package com.lyj.cleanarchitecturewithmvvm.data.source.remote.services
 
-import com.lyj.cleanarchitecturewithmvvm.data.source.remote.entities.ITunesSearchResponse
+import com.lyj.cleanarchitecturewithmvvm.data.source.remote.entity.ITunesSearchResponse
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Query

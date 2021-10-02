@@ -57,6 +57,13 @@ dependencies {
     implementation "com.google.android.material:material:$materialVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
 
+
+    //Coroutine
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-reactor:$coroutineVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-reactive:$coroutineVersion"
+
     //Rx
     implementation "com.jakewharton.rxbinding4:rxbinding-core:$rxBindingVersion"
     implementation "com.jakewharton.rxbinding4:rxbinding-appcompat:$rxBindingVersion"
@@ -88,12 +95,12 @@ dependencies {
     implementation "androidx.paging:paging-rxjava3:$pagingVersion"
 
     //KTX
-    implementation "androidx.core:core-ktx:$ktxCoreVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$ktxViewModelVersion"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$ktxLifeCycleVersion"
     implementation "androidx.fragment:fragment-ktx:$ktxFragmentVersion"
     implementation "androidx.activity:activity-ktx:$ktxActivityVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$ktxLifeCycleVersion"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$ktxLifeCycleVersion"
 
     // Dependency Injection
     implementation "com.google.dagger:hilt-android:$hiltVersion"
