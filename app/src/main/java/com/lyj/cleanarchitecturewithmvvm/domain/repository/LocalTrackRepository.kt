@@ -8,7 +8,8 @@ import io.reactivex.rxjava3.core.Single
 interface LocalTrackRepository : FavoriteDaoContract
 
 interface FavoriteDaoContract{
-    fun findAllOnce() : Flowable<List<FavoriteTrackEntity>>
+    fun findAllOnce() : Single<List<FavoriteTrackEntity>>
+    fun findAllContinouse() : Flowable<List<FavoriteTrackEntity>>
     fun findByTrackId(trackId : Long) : Single<List<FavoriteTrackEntity>>
     fun insertOrDelete(trackEntity: FavoriteTrackEntity) : Completable
 

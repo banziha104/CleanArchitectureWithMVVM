@@ -2,9 +2,11 @@ package com.lyj.cleanarchitecturewithmvvm.presentation.main.fragment.list
 
 import com.lyj.cleanarchitecturewithmvvm.presentation.main.adapter.TrackPagingRepository
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.PagingState
 import androidx.paging.rxjava3.RxPagingSource
+import androidx.paging.rxjava3.cachedIn
 import com.lyj.cleanarchitecturewithmvvm.common.extension.lang.SchedulerType
 import com.lyj.cleanarchitecturewithmvvm.common.extension.lang.subscribeOn
 import com.lyj.cleanarchitecturewithmvvm.data.source.remote.services.ITunesService
@@ -25,9 +27,8 @@ class ListViewModel @Inject constructor(
     val tabType = MainTabType.LIST
 
     val pagingAdapterData: Flowable<PagingData<TrackData>> by lazy {
-        trackPagingRepository.getPagingData(tabType)
+        trackPagingRepository.getPagingData(tabType).cachedIn(viewModelScope)
     }
-
 }
 
 class ListPagingSource(

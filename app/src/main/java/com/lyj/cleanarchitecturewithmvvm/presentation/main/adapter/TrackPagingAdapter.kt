@@ -14,16 +14,19 @@ import com.jakewharton.rxbinding4.view.clicks
 import com.lyj.cleanarchitecturewithmvvm.R
 import com.lyj.cleanarchitecturewithmvvm.common.extension.lang.testTag
 import com.lyj.cleanarchitecturewithmvvm.domain.model.TrackData
+import java.util.concurrent.TimeUnit
 
-class TrackAdapter(private val viewModel: TrackAdapterViewModel): PagingDataAdapter<TrackData, TrackAdapter.TrackViewHolder>(viewModel.diffUtil) {
+class TrackAdapter(private val viewModel: TrackAdapterViewModel) :
+    PagingDataAdapter<TrackData, TrackAdapter.TrackViewHolder>(viewModel.diffUtil) {
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        val data : TrackData? = getItem(position)
+        val data: TrackData? = getItem(position)
         holder.apply {
+            val isFavorite = data?.isFavorite ?: false
             trackName.text = data?.trackName
             collectionName.text = data?.collectionName
             artistName.text = data?.artistName
-//            btnFavorite.setImageDrawable(viewModel.resDrawble(if (data?.isFavorite != null && data?.isFavorite) R.drawable.ic_star_normal else R.drawable.ic_star_inverted))
+            btnFavorite.setImageDrawable(viewModel.resDrawble(if (isFavorite) R.drawable.ic_star_normal else R.drawable.ic_star_inverted))
 
             Glide
                 .with(viewModel.context)
@@ -33,10 +36,10 @@ class TrackAdapter(private val viewModel: TrackAdapterViewModel): PagingDataAdap
             if (data != null) {
                 viewModel
                     .onFavoriteButtonClick(
-                        btnFavorite.clicks().map {
-                            Log.d(testTag,"clicked")
+                        btnFavorite.clicks().throttleFirst(1, TimeUnit.SECONDS).map {
                             data
-                        }
+                        },
+                        position
                     )
             }
         }

@@ -1,5 +1,6 @@
 package com.lyj.cleanarchitecturewithmvvm.domain.model
 
+import androidx.recyclerview.widget.DiffUtil
 import com.lyj.cleanarchitecturewithmvvm.common.utils.Equatable
 import com.lyj.cleanarchitecturewithmvvm.common.utils.IdGettable
 import java.lang.NullPointerException
@@ -16,8 +17,19 @@ data class TrackData(
     val artistName : String?,
     val url : String?,
     var isFavorite: IsFavorite? = null
-) : IdGettable<Int>, Equatable{
+) : IdGettable<Int>{
     override val id: Int = trackId ?: throw NullPointerException()
+}
+
+class TrackDataDiffUtils : DiffUtil.ItemCallback<TrackData>(){
+    override fun areItemsTheSame(oldItem: TrackData, newItem: TrackData): Boolean {
+        return oldItem == newItem
+    }
+
+    override fun areContentsTheSame(oldItem: TrackData, newItem: TrackData): Boolean {
+        return oldItem.trackId == newItem.trackId
+    }
+
 }
 
 @JvmInline

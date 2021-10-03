@@ -28,7 +28,7 @@ import javax.inject.Inject
 class TrackAdapterViewModel(
     override val context: Context,
     override val diffUtil: DiffUtil.ItemCallback<TrackData>,
-    val onFavoriteButtonClick : (Observable<TrackData>) -> Unit
+    val onFavoriteButtonClick : (Observable<TrackData>, Int) -> Unit
 ) : PagingAdapterViewModel<TrackData>
 
 

@@ -1,11 +1,8 @@
 package com.lyj.cleanarchitecturewithmvvm.domain.usecase
 
 import com.lyj.cleanarchitecturewithmvvm.data.source.local.entity.FavoriteTrackEntity
-import com.lyj.cleanarchitecturewithmvvm.domain.model.CheckFavorite
 import com.lyj.cleanarchitecturewithmvvm.domain.model.TrackData
-import com.lyj.cleanarchitecturewithmvvm.domain.repository.FavoriteDaoContract
 import com.lyj.cleanarchitecturewithmvvm.domain.repository.LocalTrackRepository
-import com.lyj.cleanarchitecturewithmvvm.domain.repository.RemoteTrackRepository
 import com.lyj.cleanarchitecturewithmvvm.domain.translator.TrackTranslator
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
@@ -17,9 +14,14 @@ class LocalTrackUseCase @Inject constructor(
     private val translator: TrackTranslator
 ) {
 
+    fun findAllOnce() : Single<List<TrackData>> = repository
+        .findAllOnce()
+        .map {  list ->
+            list.map { translator.fromTrackDataGettable(it) }
+        }
     fun observeFavoriteEntity(): Flowable<List<TrackData>> =
         repository
-            .findAllOnce()
+            .findAllContinouse()
             .onBackpressureBuffer()
             .map { list ->
                 list.map { translator.fromTrackDataGettable(it) }

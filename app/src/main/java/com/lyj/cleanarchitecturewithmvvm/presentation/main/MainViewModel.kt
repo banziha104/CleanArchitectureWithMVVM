@@ -12,6 +12,7 @@ import com.lyj.cleanarchitecturewithmvvm.common.extension.lang.SchedulerType
 import com.lyj.cleanarchitecturewithmvvm.common.extension.lang.applyScheduler
 import com.lyj.cleanarchitecturewithmvvm.common.extension.lang.observeOn
 import com.lyj.cleanarchitecturewithmvvm.common.extension.lang.subscribeOn
+import com.lyj.cleanarchitecturewithmvvm.data.source.local.entity.FavoriteTrackEntity
 import com.lyj.cleanarchitecturewithmvvm.domain.model.CheckFavorite
 import com.lyj.cleanarchitecturewithmvvm.domain.model.TrackData
 import com.lyj.cleanarchitecturewithmvvm.domain.model.TrackId
@@ -19,8 +20,10 @@ import com.lyj.cleanarchitecturewithmvvm.domain.usecase.LocalTrackUseCase
 import com.lyj.cleanarchitecturewithmvvm.presentation.main.fragment.favorite.FavoriteFragment
 import com.lyj.cleanarchitecturewithmvvm.presentation.main.fragment.list.ListFragment
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
+import java.lang.RuntimeException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,6 +45,8 @@ class MainViewModel @Inject constructor(
             .observeFavoriteEntity()
             .subscribeOn(SchedulerType.IO)
     }
+
+    fun insertOrDeleteTrackData(trackData: TrackData) : Completable = useCase.insertOrDelete(FavoriteTrackEntity.fromTrackData(trackData))
 }
 
 enum class MainTabType(
