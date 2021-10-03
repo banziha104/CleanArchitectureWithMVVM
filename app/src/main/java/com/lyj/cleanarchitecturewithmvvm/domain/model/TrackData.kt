@@ -11,36 +11,26 @@ typealias TrackId = Int
 typealias IsFavorite = Boolean
 
 data class TrackData(
-    val trackId : Int?,
-    val trackName : String?,
-    val collectionName : String?,
-    val artistName : String?,
-    val url : String?,
+    val trackId: Int?,
+    val trackName: String?,
+    val collectionName: String?,
+    val artistName: String?,
+    val url: String?,
     var isFavorite: IsFavorite? = null
-) : IdGettable<Int>{
-    override val id: Int = trackId ?: throw NullPointerException()
-}
-
-class TrackDataDiffUtils : DiffUtil.ItemCallback<TrackData>(){
-    override fun areItemsTheSame(oldItem: TrackData, newItem: TrackData): Boolean {
-        return oldItem == newItem
-    }
-
-    override fun areContentsTheSame(oldItem: TrackData, newItem: TrackData): Boolean {
-        return oldItem.trackId == newItem.trackId
-    }
-
+) : IdGettable<Int>, Equatable {
+    override val id: Int
+        get() = trackId ?: throw NullPointerException()
 }
 
 @JvmInline
 value class CheckFavorite(val func: (FavoritesTrackIds, TrackId?) -> IsFavorite)
 
-interface TrackDataGettable{
-    val trackId : Int?
-    val trackName : String?
-    val collectionName : String?
-    val artistName : String?
-    val url : String?
+interface TrackDataGettable {
+    val trackId: Int?
+    val trackName: String?
+    val collectionName: String?
+    val artistName: String?
+    val url: String?
 }
 
 //data class TrackData(

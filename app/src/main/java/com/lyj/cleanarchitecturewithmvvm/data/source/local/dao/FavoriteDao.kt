@@ -19,10 +19,10 @@ import java.lang.RuntimeException
 @Dao
 interface FavoriteDao : LocalTrackRepository {
 
-    @Query("SELECT * FROM favorite_track ORDER BY track_id ASC")
+    @Query("SELECT * FROM favorite_track")
     override fun findAllOnce(): Single<List<FavoriteTrackEntity>>
 
-    @Query("SELECT * FROM favorite_track ORDER BY track_id ASC")
+    @Query("SELECT * FROM favorite_track")
     override fun findAllContinouse(): Flowable<List<FavoriteTrackEntity>>
 
     @Query("SELECT * FROM favorite_track WHERE track_id == :trackId")

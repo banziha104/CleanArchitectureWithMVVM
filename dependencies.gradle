@@ -74,14 +74,16 @@ ext {
     accompanistVersion = '0.17.0'
 
     //Test
-    mockitoVersion ='3.11.2'
+    mockitoVersion ='3.12.4'
     mockitoInlineVersion ='2.21.0'
+    mockitoKotlinVersion = '3.2.0'
     junitVersion = '4.13'
     androidxJunitVersion = '1.1.3'
     espressVersion = '3.4.0'
     androidTestRuleVersion='1.1.0'
     archTextVersion = '2.1.0'
     robolectricVersion = '4.4'
+    androidBenchmarkVersion = '1.0.0'
 
     //Kakao
     kakaoSdkVersion = '2.5.2'

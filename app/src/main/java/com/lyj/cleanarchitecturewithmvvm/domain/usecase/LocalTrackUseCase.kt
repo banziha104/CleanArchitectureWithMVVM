@@ -19,6 +19,7 @@ class LocalTrackUseCase @Inject constructor(
         .map {  list ->
             list.map { translator.fromTrackDataGettable(it) }
         }
+
     fun observeFavoriteEntity(): Flowable<List<TrackData>> =
         repository
             .findAllContinouse()

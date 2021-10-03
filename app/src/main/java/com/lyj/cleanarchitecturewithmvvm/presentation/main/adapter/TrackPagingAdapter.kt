@@ -16,12 +16,13 @@ import com.lyj.cleanarchitecturewithmvvm.common.extension.lang.testTag
 import com.lyj.cleanarchitecturewithmvvm.domain.model.TrackData
 import java.util.concurrent.TimeUnit
 
-class TrackAdapter(private val viewModel: TrackAdapterViewModel) :
-    PagingDataAdapter<TrackData, TrackAdapter.TrackViewHolder>(viewModel.diffUtil) {
+class TrackPagingAdapter(private val viewModel: TrackAdapterViewModel) :
+    PagingDataAdapter<TrackData, TrackPagingAdapter.TrackViewHolder>(viewModel.diffUtil) {
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         val data: TrackData? = getItem(position)
         holder.apply {
+            Log.d(testTag,"onBindViewHolder $position")
             val isFavorite = data?.isFavorite ?: false
             trackName.text = data?.trackName
             collectionName.text = data?.collectionName
@@ -36,7 +37,7 @@ class TrackAdapter(private val viewModel: TrackAdapterViewModel) :
             if (data != null) {
                 viewModel
                     .onFavoriteButtonClick(
-                        btnFavorite.clicks().throttleFirst(1, TimeUnit.SECONDS).map {
+                        btnFavorite.clicks().map {
                             data
                         },
                         position

@@ -1,9 +1,14 @@
 package com.lyj.benchmark
 
+import android.content.Context
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.FrameLayout
 import androidx.benchmark.junit4.BenchmarkRule
 import androidx.benchmark.junit4.measureRepeated
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.lyj.benchmark.test.R
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -15,15 +20,18 @@ import org.junit.runner.RunWith
  * output the result. Modify your code to see how it affects performance.
  */
 @RunWith(AndroidJUnit4::class)
-class ExampleBenchmark {
-
+class ViewBenchmark {
     @get:Rule
     val benchmarkRule = BenchmarkRule()
 
     @Test
-    fun log() {
+    fun simpleViewInflate() {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        val inflater = LayoutInflater.from(context)
+        val root = FrameLayout(context)
+
         benchmarkRule.measureRepeated {
-            Log.d("LogBenchmark", "the cost of writing this log method will be measured")
+            inflater.inflate(R.layout.isolation_activity, root, false)
         }
     }
 }
