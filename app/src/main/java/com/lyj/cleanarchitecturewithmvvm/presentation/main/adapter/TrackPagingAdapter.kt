@@ -22,7 +22,7 @@ class TrackPagingAdapter(private val viewModel: TrackAdapterViewModel) :
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         val data: TrackData? = getItem(position)
         holder.apply {
-            Log.d(testTag,"onBindViewHolder $position")
+            Log.d(testTag, "onBindViewHolder $position")
             val isFavorite = data?.isFavorite ?: false
             trackName.text = data?.trackName
             collectionName.text = data?.collectionName
@@ -33,16 +33,6 @@ class TrackPagingAdapter(private val viewModel: TrackAdapterViewModel) :
                 .with(viewModel.context)
                 .load(data?.url)
                 .into(imageView)
-
-            if (data != null) {
-                viewModel
-                    .onFavoriteButtonClick(
-                        btnFavorite.clicks().map {
-                            data
-                        },
-                        position
-                    )
-            }
         }
     }
 
@@ -57,5 +47,12 @@ class TrackPagingAdapter(private val viewModel: TrackAdapterViewModel) :
         val artistName: TextView = view.findViewById(R.id.trackTxtArtistName)
         val imageView: ImageView = view.findViewById(R.id.trackImgAlbum)
         val btnFavorite: AppCompatImageButton = view.findViewById(R.id.trackBtnFavorite)
+
+        init {
+            viewModel
+                .onFavoriteButtonClick(
+                    btnFavorite.clicks().map { bindingAdapterPosition to getItem(bindingAdapterPosition)!! }
+                )
+        }
     }
 }

@@ -1,10 +1,10 @@
 package com.lyj.cleanarchitecturewithmvvm.domain.usecase
 
+import com.lyj.cleanarchitecturewithmvvm.data.source.local.dao.FavoriteDaoEventType
 import com.lyj.cleanarchitecturewithmvvm.data.source.local.entity.FavoriteTrackEntity
 import com.lyj.cleanarchitecturewithmvvm.domain.model.TrackData
 import com.lyj.cleanarchitecturewithmvvm.domain.repository.LocalTrackRepository
 import com.lyj.cleanarchitecturewithmvvm.domain.translator.TrackTranslator
-import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
@@ -37,7 +37,9 @@ class LocalTrackUseCase @Inject constructor(
             }
         }
 
-    fun insertOrDelete(trackEntity: FavoriteTrackEntity): Completable =
-        repository.insertOrDelete(trackEntity)
+    fun insertOrDelete(trackData: TrackData): Single<FavoriteDaoEventType> =
+        repository
+            .insertOrDelete(FavoriteTrackEntity.fromTrackData(trackData))
+
 
 }

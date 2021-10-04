@@ -11,20 +11,21 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 class RepositoryModule {
     @Provides
-    @ViewModelScoped
+    @Singleton
     fun provideLocalTrackRepository(
         dataBase: LocalDataBase
     ): LocalTrackRepository = LocalTrackRepositoryImpl(dataBase)
 
 
     @Provides
-    @ViewModelScoped
+    @Singleton
     fun provideRemoteTrackRepositoryImpl(
         service: ITunesService
     ): RemoteTrackRepository = RemoteTrackRepositoryImpl(service)

@@ -17,12 +17,6 @@ import org.mockito.kotlin.mock
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        val remoteTrackRepository = mock<RemoteTrackRepository>{
-            on { requestRemoteTrackData(0) } doReturn Single.just(ITunesSearchResponse.Response(resultCount = 30))
-        }
-
-        val a = remoteTrackRepository.requestRemoteTrackData(0)
-        println("마이 ${a.blockingGet().resultCount}")
         assertEquals(4, 2 + 2)
     }
 }

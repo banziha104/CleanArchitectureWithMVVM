@@ -1,13 +1,10 @@
 package com.lyj.cleanarchitecturewithmvvm.data.source.local.dao
 
-import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.lyj.cleanarchitecturewithmvvm.common.extension.lang.testTag
 import com.lyj.cleanarchitecturewithmvvm.data.source.local.entity.FavoriteTrackEntity
-import com.lyj.cleanarchitecturewithmvvm.domain.model.TrackId
 import com.lyj.cleanarchitecturewithmvvm.domain.repository.LocalTrackRepository
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
@@ -35,29 +32,28 @@ interface FavoriteDao : LocalTrackRepository {
     fun delete(trackId: Long): Completable
 
     @Throws(NumberFormatException::class)
-    override fun insertOrDelete(trackEntity: FavoriteTrackEntity): Completable {
-        return try {
+    override fun insertOrDelete(trackEntity: FavoriteTrackEntity): Single<FavoriteDaoEventType> =
+        try {
             val trackId = trackEntity.trackId?.toLong()
             if (trackId != null) {
-                findByTrackId(trackId).flatMapCompletable { list ->
-                    if (list.isEmpty()){
-                        Log.d(testTag,"insert $trackEntity")
-                        insert(trackEntity)
+                findByTrackId(trackId).flatMap { list ->
+                    if (list.isEmpty()) {
+                        insert(trackEntity).andThen(Single.just(FavoriteDaoEventType.INSERT))
                     } else {
-                        Log.d(testTag,"delete $trackEntity")
-                        delete(trackId)
+                        delete(trackId).andThen(Single.just(FavoriteDaoEventType.DELETE))
                     }
                 }
             } else {
-                Log.d(testTag,"error null")
-                Completable.error(TrackIdIsNullException())
+                Single.error(TrackIdIsNullException())
             }
         } catch (e: Exception) {
-
-            Log.d(testTag,"error wrong")
-            Completable.error(TrackIdIsWrongException(trackId = trackEntity.trackId))
+            Single.error(TrackIdIsWrongException(trackEntity.trackId))
         }
-    }
+
+}
+
+enum class FavoriteDaoEventType {
+    INSERT, DELETE
 }
 
 class TrackIdIsNullException(

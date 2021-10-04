@@ -8,10 +8,16 @@ import androidx.benchmark.junit4.BenchmarkRule
 import androidx.benchmark.junit4.measureRepeated
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.ar.core.Config
 import com.lyj.benchmark.test.R
+import com.lyj.cleanarchitecturewithmvvm.domain.model.TrackDataGettable
+import com.lyj.cleanarchitecturewithmvvm.domain.translator.TrackTranslator
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import javax.inject.Inject
 
 /**
  * Benchmark, which will execute on an Android device.
@@ -19,19 +25,42 @@ import org.junit.runner.RunWith
  * The body of [BenchmarkRule.measureRepeated] is measured in a loop, and Studio will
  * output the result. Modify your code to see how it affects performance.
  */
+
+
+@HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class ViewBenchmark {
     @get:Rule
     val benchmarkRule = BenchmarkRule()
 
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
+
+    @Inject
+    lateinit var translator: TrackTranslator
+
+    fun init() {
+        hiltRule.inject()
+    }
+
     @Test
-    fun simpleViewInflate() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val inflater = LayoutInflater.from(context)
-        val root = FrameLayout(context)
+    fun log() {
 
         benchmarkRule.measureRepeated {
-            inflater.inflate(R.layout.isolation_activity, root, false)
+            val data = translator.fromTrackDataGettable(object : TrackDataGettable {
+                override val trackId: Int?
+                    get() = 1
+                override val trackName: String?
+                    get() = "a"
+                override val collectionName: String?
+                    get() = "b"
+                override val artistName: String?
+                    get() = "c"
+                override val url: String?
+                    get() = "d"
+            })
+            Log.d("LogBenchmark", "$data")
         }
     }
 }
+

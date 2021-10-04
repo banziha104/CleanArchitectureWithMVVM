@@ -1,7 +1,8 @@
-package com.lyj.cleanarchitecturewithmvvm.presentation
+package com.lyj.cleanarchitecturewithmvvm.domain.usecase
 
-import com.lyj.cleanarchitecturewithmvvm.data.source.remote.services.ITunesService
-import com.lyj.cleanarchitecturewithmvvm.presentation.main.MainViewModel
+import com.lyj.cleanarchitecturewithmvvm.domain.repository.RemoteTrackRepository
+import com.lyj.cleanarchitecturewithmvvm.domain.translator.TrackTranslator
+import com.lyj.cleanarchitecturewithmvvm.presentation.main.adapter.TrackPagingRepository
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -14,28 +15,32 @@ import org.robolectric.annotation.Config
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
-@Config(application = HiltTestApplication::class,sdk = [29])
-class MainViewModelTests {
+@Config(application = HiltTestApplication::class, sdk = [29])
+class RemoteTrackUseTests {
+
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
+
     @Inject
-    lateinit var mainViewModel : MainViewModel
+    lateinit var remoteTrackUseCase: RemoteTrackUseCase
 
     @Before
-    fun init(){
+    fun init() {
         hiltRule.inject()
     }
 
     @Test
-    fun viewModelTest(){
-        mainViewModel
-            .currentLocalTrackData
+    fun remoteTrackUseCaseTests(){
+        remoteTrackUseCase
+            .execute(0)
             .test()
-            .awaitDone(2, TimeUnit.SECONDS)
+            .awaitDone(1,TimeUnit.SECONDS)
             .assertNoErrors()
+            .assertComplete()
             .assertValue {
                 it.isNotEmpty()
             }
