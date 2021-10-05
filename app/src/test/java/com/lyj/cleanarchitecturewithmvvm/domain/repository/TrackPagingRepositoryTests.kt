@@ -1,6 +1,9 @@
-package com.lyj.cleanarchitecturewithmvvm.domain.usecase
+package com.lyj.cleanarchitecturewithmvvm.domain.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.lyj.cleanarchitecturewithmvvm.TestConfig
+import com.lyj.cleanarchitecturewithmvvm.presentation.main.MainTabType
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -17,18 +20,22 @@ import javax.inject.Inject
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
 @Config(application = HiltTestApplication::class, sdk = [TestConfig.SDK_VERSION])
-class LocalTrackUseCaseTestTests {
+class TrackPagingRepositoryTests {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
     @Inject
-
-    lateinit var localTrackUseCase: LocalTrackUseCase
+    lateinit var trackPagingRepository: TrackPagingRepository
 
     @Before
     fun init() {
         hiltRule.inject()
     }
 
+    @Test
+    fun `트랙_테스트`(){
+        trackPagingRepository
+            .getPagingTrackData(MutableLiveData(MainTabType.LIST))
+    }
 }

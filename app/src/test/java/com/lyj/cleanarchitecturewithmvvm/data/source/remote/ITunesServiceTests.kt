@@ -1,5 +1,6 @@
 package com.lyj.cleanarchitecturewithmvvm.data.source.remote
 
+import com.lyj.cleanarchitecturewithmvvm.TestConfig
 import com.lyj.cleanarchitecturewithmvvm.data.source.remote.services.ITunesService
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -15,7 +16,7 @@ import javax.inject.Inject
 
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
-@Config(application = HiltTestApplication::class)
+@Config(application = HiltTestApplication::class, sdk = [TestConfig.SDK_VERSION])
 class ITunesServiceTests {
 
     @get:Rule
@@ -35,7 +36,6 @@ class ITunesServiceTests {
             .searchITunesList(0)
             .test()
             .awaitDone(3,TimeUnit.SECONDS)
-            .assertComplete()
             .assertValue {
                 println(it.toString())
                 it.resultCount != null

@@ -3,20 +3,24 @@ package com.lyj.cleanarchitecturewithmvvm.data.source.local
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import com.lyj.cleanarchitecturewithmvvm.TestConfig
 import com.lyj.cleanarchitecturewithmvvm.common.extension.lang.SchedulerType
 import com.lyj.cleanarchitecturewithmvvm.common.extension.lang.applyScheduler
 import com.lyj.cleanarchitecturewithmvvm.data.source.local.dao.FavoriteDao
 import com.lyj.cleanarchitecturewithmvvm.data.source.local.entity.FavoriteTrackEntity
+import dagger.hilt.android.testing.HiltTestApplication
 import org.junit.*
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import java.util.concurrent.TimeUnit
 
 
 @RunWith(RobolectricTestRunner::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-class ITunesDatabaseTest {
+@Config(application = HiltTestApplication::class, sdk = [TestConfig.SDK_VERSION])
+class LocalDatabaseTest {
     private lateinit var dao: FavoriteDao
     private lateinit var database: LocalDataBase
 
