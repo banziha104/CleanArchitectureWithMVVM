@@ -1,8 +1,6 @@
 package com.lyj.cleanarchitecturewithmvvm.domain.usecase
 
-import com.lyj.cleanarchitecturewithmvvm.domain.repository.RemoteTrackRepository
-import com.lyj.cleanarchitecturewithmvvm.domain.translator.TrackTranslator
-import com.lyj.cleanarchitecturewithmvvm.presentation.main.adapter.TrackPagingRepository
+import com.lyj.cleanarchitecturewithmvvm.TestConfig
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.HiltTestApplication
@@ -18,8 +16,8 @@ import javax.inject.Inject
 
 @HiltAndroidTest
 @RunWith(RobolectricTestRunner::class)
-@Config(application = HiltTestApplication::class, sdk = [29])
-class RemoteTrackUseTests {
+@Config(application = HiltTestApplication::class, sdk = [TestConfig.SDK_VERSION])
+class RemoteTrackUseCaseTests {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)

@@ -15,7 +15,6 @@ import org.reactivestreams.Subscriber
 
 interface DisposableLifecycleController : LifecycleOwner {
     val disposableLifecycleObserver: DisposableLifecycleObserver
-        get() = getObserver(this)
 
     fun <T> disposeByOnStop(): LifecycleTransformer<T> =
         disposableLifecycleObserver.getTransfomer(disposeBy = Lifecycle.Event.ON_STOP)
@@ -25,17 +24,6 @@ interface DisposableLifecycleController : LifecycleOwner {
 
     fun <T> disposeByOnDestroy(): LifecycleTransformer<T> =
         disposableLifecycleObserver.getTransfomer(disposeBy = Lifecycle.Event.ON_DESTROY)
-
-    companion object {
-        private val map: MutableMap<String, DisposableLifecycleObserver> = mutableMapOf()
-        private fun getObserver(lifecycleOwner: LifecycleOwner) =
-            map[lifecycleOwner::class.java.simpleName] ?: let {
-                Log.d(testTag, "${lifecycleOwner::class.java.simpleName}")
-                val observer = DisposableLifecycleObserver(lifecycleOwner)
-                map[lifecycleOwner::class.java.simpleName] = observer
-                observer
-            }
-    }
 }
 
 class DisposableLifecycleObserver(

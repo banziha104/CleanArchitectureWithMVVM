@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.MutableLiveData
 import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lyj.cleanarchitecturewithmvvm.common.base.*
@@ -24,15 +22,15 @@ import com.lyj.cleanarchitecturewithmvvm.presentation.main.adapter.TrackPagingAd
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), DisposableLifecycleController {
 
+    override val disposableLifecycleObserver: DisposableLifecycleObserver = DisposableLifecycleObserver(this)
+
     private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val viewModel: MainViewModel by viewModels<MainViewModel>()
-    private val rxLifecycle : DisposableLifecycleObserver = DisposableLifecycleObserver(this)
 
     private val pagingAdapter: TrackPagingAdapter by lazy {
         TrackPagingAdapter(
@@ -89,6 +87,7 @@ class MainActivity : AppCompatActivity(), DisposableLifecycleController {
 
     private fun observeRxSource() {
         observeTrackData()
+        observeBottomNavigation()
     }
 
     private fun observeTrackData() {
@@ -115,6 +114,7 @@ class MainActivity : AppCompatActivity(), DisposableLifecycleController {
             .concatMapEager {
                 viewModel.mainDataChangeObserver.toFlowable(BackpressureStrategy.LATEST)
             }
+            .delay(20,TimeUnit.MILLISECONDS)
             .observeOn(SchedulerType.MAIN)
             .compose(disposeByOnPause())
             .subscribe({ position ->
@@ -130,7 +130,9 @@ class MainActivity : AppCompatActivity(), DisposableLifecycleController {
             }, {
                 it.printStackTrace()
             })
+    }
 
+    private fun observeBottomNavigation(){
         binding
             .mainBottomNavigationView
             .selectedObserver(this, viewModel.currentMainTabType.value)

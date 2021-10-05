@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.lyj.cleanarchitecturewithmvvm.data.source.local.entity.FavoriteTrackEntity
+import com.lyj.cleanarchitecturewithmvvm.domain.repository.FavoriteDaoContract
 import com.lyj.cleanarchitecturewithmvvm.domain.repository.LocalTrackRepository
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
@@ -14,7 +15,7 @@ import java.lang.NumberFormatException
 import java.lang.RuntimeException
 
 @Dao
-interface FavoriteDao : LocalTrackRepository {
+interface FavoriteDao : FavoriteDaoContract {
 
     @Query("SELECT * FROM favorite_track")
     override fun findAllOnce(): Single<List<FavoriteTrackEntity>>

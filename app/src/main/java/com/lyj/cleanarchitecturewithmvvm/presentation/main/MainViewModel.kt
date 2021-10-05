@@ -12,23 +12,18 @@ import com.lyj.cleanarchitecturewithmvvm.common.extension.lang.subscribeOn
 import com.lyj.cleanarchitecturewithmvvm.data.source.local.dao.FavoriteDaoEventType
 import com.lyj.cleanarchitecturewithmvvm.domain.model.CheckFavorite
 import com.lyj.cleanarchitecturewithmvvm.domain.model.TrackData
-import com.lyj.cleanarchitecturewithmvvm.domain.usecase.LocalTrackUseCase
-import com.lyj.cleanarchitecturewithmvvm.domain.usecase.RemoteTrackUseCase
-import com.lyj.cleanarchitecturewithmvvm.presentation.main.adapter.TrackPagingRepository
+import com.lyj.cleanarchitecturewithmvvm.domain.usecase.TrackUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     application: Application,
-    private val localUseCase: LocalTrackUseCase,
-    private val pagingRepository: TrackPagingRepository,
+    private val useCase: TrackUseCase,
 ) : AndroidViewModel(application) {
-
 
     val currentMainTabType: MutableLiveData<MainTabType> by lazy {
         MutableLiveData<MainTabType>(MainTabType.LIST)
@@ -37,19 +32,18 @@ class MainViewModel @Inject constructor(
     val mainDataChangeObserver: PublishSubject<Int> = PublishSubject.create()
 
     val localDataObserver: Flowable<List<TrackData>> by lazy {
-        localUseCase
-            .observeFavoriteEntity()
+        useCase
+            .observeLocalData()
             .subscribeOn(SchedulerType.IO)
     }
 
-    fun getPagingRepository(mainTabType: MutableLiveData<MainTabType>) = pagingRepository
+    fun getPagingRepository(mainTabType: MutableLiveData<MainTabType>) = useCase
         .getPagingTrackData(mainTabType)
         .cachedIn(viewModelScope)
 
     fun insertOrDeleteTrackData(trackData: TrackData): Single<FavoriteDaoEventType> =
-        localUseCase
+        useCase
             .insertOrDelete(trackData)
-
 }
 
 enum class MainTabType(
