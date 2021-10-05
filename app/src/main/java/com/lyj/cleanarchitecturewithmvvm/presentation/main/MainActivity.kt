@@ -5,10 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.lyj.cleanarchitecturewithmvvm.common.base.*
 import com.lyj.cleanarchitecturewithmvvm.common.extension.android.longToast
 import com.lyj.cleanarchitecturewithmvvm.common.extension.android.selectedObserver
 import com.lyj.cleanarchitecturewithmvvm.common.extension.android.unwrappedValue
@@ -16,7 +17,6 @@ import com.lyj.cleanarchitecturewithmvvm.common.extension.lang.SchedulerType
 import com.lyj.cleanarchitecturewithmvvm.common.extension.lang.observeOn
 import com.lyj.cleanarchitecturewithmvvm.common.extension.lang.testTag
 import com.lyj.cleanarchitecturewithmvvm.common.utils.DefaultDiffUtil
-import com.lyj.cleanarchitecturewithmvvm.data.source.local.dao.FavoriteDaoEventType
 import com.lyj.cleanarchitecturewithmvvm.databinding.ActivityMainBinding
 import com.lyj.cleanarchitecturewithmvvm.domain.model.TrackData
 import com.lyj.cleanarchitecturewithmvvm.presentation.main.adapter.TrackAdapterViewModel
@@ -25,23 +25,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.subjects.CompletableSubject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
-import kotlinx.coroutines.reactive.asPublisher
-import kotlinx.coroutines.rx3.asFlowable
-import kotlinx.coroutines.rx3.asObservable
-import okhttp3.internal.wait
 import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), DisposableLifecycleController {
 
     private val binding: ActivityMainBinding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private val viewModel: MainViewModel by viewModels<MainViewModel>()
+    private val rxLifecycle : DisposableLifecycleObserver = DisposableLifecycleObserver(this)
 
     private val pagingAdapter: TrackPagingAdapter by lazy {
         TrackPagingAdapter(
@@ -51,8 +42,9 @@ class MainActivity : AppCompatActivity() {
             ) { onClickObserver ->
                 onClickObserver
                     .observeOn(SchedulerType.IO)
+                    .disposeByOnDestory(this)
                     .throttleFirst(1, TimeUnit.SECONDS)
-                    .flatMapSingle { (index,data)->
+                    .switchMapSingle { (index,data)->
                         viewModel.insertOrDeleteTrackData(data).map { index }
                     }
                     .subscribe({ index ->
@@ -121,12 +113,12 @@ class MainActivity : AppCompatActivity() {
                 pagingAdapter.submitData(lifecycle,pagingDataSource)
             }
             .concatMapEager {
-                viewModel.mainDataChangeObserver.toFlowable(BackpressureStrategy.MISSING)
+                viewModel.mainDataChangeObserver.toFlowable(BackpressureStrategy.LATEST)
             }
-            .delay(40,TimeUnit.MILLISECONDS)
             .observeOn(SchedulerType.MAIN)
+            .compose(disposeByOnPause())
             .subscribe({ position ->
-                Log.d(testTag, "아래 호출")
+                Log.d(testTag, "아래 호출 $position")
                 when (viewModel.currentMainTabType.unwrappedValue) {
                     MainTabType.LIST -> {
                         pagingAdapter.notifyItemChanged(position)

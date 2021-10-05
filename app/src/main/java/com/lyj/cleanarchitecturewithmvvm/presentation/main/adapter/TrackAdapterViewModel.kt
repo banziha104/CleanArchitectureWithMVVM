@@ -40,7 +40,7 @@ class TrackPagingRepository @Inject constructor(
     private val localTrackUseCase: LocalTrackUseCase
 ) {
     fun getPagingTrackData(
-        mainTabType: MutableLiveData<MainTabType>
+        mainTabType: LiveData<MainTabType>
     ): Flowable<PagingData<TrackData>> {
         return Pager<Int, TrackData>(
             PagingConfig(pageSize = 1),
@@ -56,7 +56,7 @@ class TrackPagingRepository @Inject constructor(
 }
 
 class TrackPagingSource(
-    private val mainTabType: MutableLiveData<MainTabType>,
+    private val mainTabType: LiveData<MainTabType>,
     private val remoteTrackUseCase: RemoteTrackUseCase,
     private val localTrackUseCase: LocalTrackUseCase
 ) : RxPagingSource<Int, TrackData>() {
@@ -69,7 +69,7 @@ class TrackPagingSource(
     override fun loadSingle(params: LoadParams<Int>): Single<LoadResult<Int, TrackData>> {
         val page = params.key ?: DEFAULT_PAGE
 
-        return when (mainTabType.unwrappedValue) {
+        return when (mainTabType.value!!) {
             MainTabType.LIST -> {
                 remoteTrackUseCase
                     .execute(page)

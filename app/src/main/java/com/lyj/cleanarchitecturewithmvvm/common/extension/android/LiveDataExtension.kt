@@ -1,9 +1,9 @@
 package com.lyj.cleanarchitecturewithmvvm.common.extension.android
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 
 
-val <T> MutableLiveData<T>.unwrappedValue
+val <T> LiveData<T>.unwrappedValue
        get() = this.value ?: throw LiveDataNotInitializedException()
 
 class LiveDataNotInitializedException : Throwable() {
